@@ -40,7 +40,7 @@
 		var testArray:Array;		// Creates an array there shall contain the "enemies" there will be spawned
 		var spawnTimer:int;
 		
-		public function SmashCity() {
+		public function SmashCityScript() {
 			
 			//-----------------------------------------------------------------
 			saveK = new saveKNAP;
