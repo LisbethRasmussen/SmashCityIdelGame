@@ -19,6 +19,8 @@
 	import flash.ui.Keyboard;
 	import flash.text.engine.Kerning;
 	
+	import testBox1;
+	
 	
 	public class SmashCityScript extends MovieClip {
 		
@@ -81,7 +83,8 @@
 			for(var i=0; i<10; i++){			// Enteres every entry of the array
 				testArray[i] = new testBox1();	// Sets a new "enemy" into the array
 			}									// Note that this means that we are limited for a spesific amount of enemies (I think)
-			spawnTimer = 0;
+			spawnTimer = 0;						// Sets the spawntimer to 0 for the enemies
+								// Look at the update function for how the enemies are spawned
 			
 			//------------------------------------------------------------------
 			stage.addEventListener(Event.ENTER_FRAME, update);
@@ -105,13 +108,25 @@
 		}
 		function update(evt:Event):void{
 			//insæt kode der opdaterer hver frame her
-			spawnTimer++;
-			if(spawnTimer >= 72){
-				var rand:int = int(Math.random()*10);
-				var testSelected:MovieClip = testArray[rand];
-				//testSelected.spawn();
-				addChild(testSelected);
-				spawnTimer = 0;
+			spawnTimer++;										// The spawntimer counts up every frame
+			if(spawnTimer >= 72){								// When reaching 72 frames (3 seconds) then:
+				var rand:int = int(Math.random()*10);			// Generate a random number
+				var testSelected:MovieClip = testArray[rand];	// Pick the entry in the array with this number
+				testSelected.spawn();							// Run the spawn function (see the "testBox1" class)
+				addChild(testSelected);							// Adds the object to the scene
+				spawnTimer = 0;									// Resets the spawn timre
+			}
+			
+			// The following code checks for all the actions of the enemies
+			for(var i:int = 0; i<10; i++){				// Go through every enemy entry in the array
+				if(testArray[i].isSpawned == true){		// Are they spawned on the stage? if yes then:
+					testArray[i].update();				// Run their update function (see the "testBox1" class) there makes them move
+					
+					if(testArray[i].x >= 600){			// Have the enemey reached the far right of the stage? If yes then:
+						removeChild(testArray[i]);		// Remove the enemy object from the stage
+						testArray[i].deSpawn();			// Run the deSpawn function (see the "testBox1" class)
+					}
+				}
 			}
 		}
 	}
