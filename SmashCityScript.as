@@ -36,7 +36,7 @@
 		//------------------------------------
 		
 		
-		public function SmashCityScript() {
+		public function SmashCity() {
 			
 			//-----------------------------------------------------------------
 			saveK = new saveKNAP;
