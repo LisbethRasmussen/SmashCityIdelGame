@@ -35,18 +35,20 @@
 		var TF:TextFormat;
 		//------------------------------------
 		
+		var test:testOBJEKT;
 		
-		public function SmashCity() {
+		
+		public function SmashCityScript() {
 			
 			//-----------------------------------------------------------------
 			saveK = new saveKNAP;
-			saveK.x = 100;
-			saveK.y = 100;
+			saveK.x = 0;
+			saveK.y = 0;
 			addChild (saveK);
 			
 			loadK = new loadKNAP;
-			loadK.x = 100;
-			loadK.y = 100;
+			loadK.x = 0;
+			loadK.y = 0;
 			addChild (loadK);
 			
 			saveK.addEventListener(MouseEvent.MOUSE_UP, musseting);
