@@ -37,10 +37,17 @@
 		var TF:TextFormat;
 		//------------------------------------
 		
+		// Variables there dosn't fall into a category---
+		var stageWidth:int = 600;	// The width of the stage
+		
 		// Testing for enemy spawning--------
 		var myTestBox1:testBox1;	// Creates the object for the "enemies"
 		var testArray:Array;		// Creates an array there shall contain the "enemies" there will be spawned
 		var spawnTimer:int;
+		
+		var parachuteTest:testBox2;			// Creates the object for the "Parachute guys"
+		var parachuteStartPosition:Array;	// Creates an array there shall contain the position for each "Parachute guy"
+		var parachuteSpawnTimer:int;
 		
 		public function SmashCityScript() {
 			
@@ -79,11 +86,16 @@
 			addChild (tekstRP);
 			
 			// Enemy spawner ----------
-			testArray = new Array(10);			// Creates the spaces to the area
-			for(var i=0; i<10; i++){			// Enteres every entry of the array
-				testArray[i] = new testBox1();	// Sets a new "enemy" into the array
+			testArray = new Array(15);			// Creates the spaces to the array of enemies
+			for(var i=0; i<15; i++){			// Enteres every entry of the array
+				if(i < 10)
+					testArray[i] = new testBox1();	// Sets a new "enemy" into the array
+				else if (i >= 10 && i < 15)
+					testArray[i] = new testBox2();
 			}									// Note that this means that we are limited for a spesific amount of enemies (I think)
 			spawnTimer = 0;						// Sets the spawntimer to 0 for the enemies
+			parachuteSpawnTimer = 0;			// Sets the spawntimer to 0 for the Parachute guys
+			parachuteStartPosition = new Array(200, 250, 300, 350, 400);	// An array containing the positions of the parachute guys
 								// Look at the update function for how the enemies are spawned
 			
 			//------------------------------------------------------------------
@@ -114,21 +126,41 @@
 				var testSelected:MovieClip = testArray[rand];	// Pick the entry in the array with this number
 				testSelected.spawn();							// Run the spawn function (see the "testBox1" class)
 				addChild(testSelected);							// Adds the object to the scene
-				spawnTimer = 0;									// Resets the spawn timre
+				spawnTimer = 0;									// Resets the spawn timer for the enmies
+			}
+			
+			parachuteSpawnTimer++;								// The spawntimer for the parachute guys counts up every frame
+			if(parachuteSpawnTimer >= 240){						// When reaching 240 frames (10 seconds) then:
+				for(var i:int = 10; i<15; i++){					// Enter all the "Parachute guy" entries
+					testArray[i].setValueX(parachuteStartPosition[i - 10]);	// Set their X position from the array mentioned before
+					testArray[i].setValueY(0 - 24 * (i - 10));	// Sets their Y position which gives a delayed effect (minus 24 for each entry)
+					testArray[i].spawn();						// Run the spawn function (see the "testBox2" class)
+					addChild(testArray[i]);						// Adds the object to the scene
+				}
+				parachuteSpawnTimer = 0;						// Resets the spawn timer for the parachute guys
 			}
 			
 			// The following code checks for all the actions of the enemies
-			for(var i:int = 0; i<10; i++){				// Go through every enemy entry in the array
+			for(var i:int = 0; i<15; i++){				// Go through every enemy entry in the array
 				if(testArray[i].isSpawned == true){		// Are they spawned on the stage? if yes then:
-					testArray[i].update();				// Run their update function (see the "testBox1" class) there makes them move
+					testArray[i].update();				// Run their update function there makes them move
 					
-					if(testArray[i].x >= 600){			// Have the enemey reached the far right of the stage? If yes then:
-						removeChild(testArray[i]);		// Remove the enemy object from the stage
-						testArray[i].deSpawn();			// Run the deSpawn function (see the "testBox1" class)
+					if(i < 10){								// The "Enemies" entries:
+						if(testArray[i].x >= stageWidth){	// Have they reached the far right of the stage? If yes then:
+							removeChild(testArray[i]);		// Remove the enemy object from the stage
+							testArray[i].deSpawn();			// Run the deSpawn function (see the "testBox1" class)
+						}
+					}
+					else if(i >= 10 && i < 15){				// The "Parachute guys" entires:
+						if(testArray[i].y >= 400){			// Have they reached at a certain point on the stage? If yes then:
+							removeChild(testArray[i]);		// Remove the enemy object from the stage
+							testArray[i].deSpawn();			// Run the deSpawn function (see the "testBox2" class)
+						}
 					}
 				}
 			}
-		}
+			
+		} // End of update function
 	}
 	
 }
