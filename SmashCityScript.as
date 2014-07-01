@@ -7,7 +7,7 @@
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
-	import flash.net.SharedObject;
+	import flash.net.SharedObject; //needed to save the game progress on the computer
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -27,14 +27,14 @@
 		//så spillet kan gemmes-------------
 		var saveK:saveKNAP;
 		var loadK:loadKNAP;
-		var so:SharedObject = SharedObject.getLocal("SmashCity");
+		var so:SharedObject = SharedObject.getLocal("SmashCity"); //the variable "so" will make sure that the game can be saved under the defined name: "SmashCity"
 		//------------------------------------
 		//Point og research points-----------
-		var coins:int = 0;
-		var ResearchPoints:int = 0;
-		var tekstP:TextField;
-		var tekstRP:TextField;
-		var TF:TextFormat;
+		var Coins:int = 0;				//to count the coins the giant has collected
+		var ResearchPoints:int = 0;		//to count the research points the player can use for upgrades
+		var tekstC:TextField;			//text field for the coins
+		var tekstRP:TextField;			//text field for the research points
+		var TF:TextFormat;				//a variable to hold the font of the text and size and color.
 		//------------------------------------
 		
 		// Variables there dosn't fall into a category---
@@ -52,35 +52,35 @@
 		public function SmashCityScript() {
 			
 			//-----------------------------------------------------------------
-			saveK = new saveKNAP;
-			saveK.x = 100;
-			saveK.y = 100;
+			saveK = new saveKNAP; //the graphical "button" this code actually needs to be the last thing spawned, or else it will be placed under the other objects.
+			saveK.x = 400;
+			saveK.y = 0;
 			addChild (saveK);
 			
-			loadK = new loadKNAP;
-			loadK.x = 100;
-			loadK.y = 100;
+			loadK = new loadKNAP; //same as the other.
+			loadK.x = 500;
+			loadK.y = 0;
 			addChild (loadK);
 			
-			saveK.addEventListener(MouseEvent.MOUSE_UP, musseting);
+			saveK.addEventListener(MouseEvent.MOUSE_UP, musseting); //they function by clicking with the mouse, ergo they must be activated under the function musseting (mousethings)
 			loadK.addEventListener(MouseEvent.MOUSE_UP, musseting);
 			//------------------------------------------------------------------
 			
 			TF = new TextFormat;
-			TF.font ="_sans";
-			TF.color = 0x000099;
+			TF.font ="_sans"; //comic sans
+			TF.color = 0x000099; //blue, hexadecimal or something
 			TF.size = 40;
 			
-			tekstP=new TextField;
-			tekstP.x = 100;
-			tekstP.y = 100;
-			tekstP.defaultTextFormat = TF;
-			tekstP.text = coins+"";
-			addChild (tekstP);
+			tekstC=new TextField; //coin counter
+			tekstC.x = 20;
+			tekstC.y = -8;
+			tekstC.defaultTextFormat = TF;
+			tekstC.text = Coins+"";
+			addChild (tekstC);
 			
-			tekstRP=new TextField;
-			tekstRP.x = 100;
-			tekstRP.y = 100;
+			tekstRP=new TextField; //researche counter
+			tekstRP.x = 20;
+			tekstRP.y = 25;
 			tekstRP.defaultTextFormat = TF;
 			tekstRP.text = ResearchPoints+"";
 			addChild (tekstRP);
@@ -103,19 +103,20 @@
 		}
 		
 		function musseting(event:MouseEvent){
-			
-			if (saveK == event.currentTarget){
-				so.data.hi = coins;
-				so.data.hi2 = ResearchPoints;
-				trace (so.data.hi);
+			//-----------------------------------The save and load game code-------
+			if (saveK == event.currentTarget){ 	//when this button is clicked
+				so.data.hi = Coins;				//the so variable will create a "storer", which i have called "hi". It sets the "hi" storer to the value of the coins counter current number
+				so.data.hi2 = ResearchPoints;	//and here is hi2 for saving the research points!
+				trace (so.data.hi); //to check that it works
 			}
-			if (loadK == event.currentTarget){
-				coins = so.data.hi;
-				tekstP.text = coins+"";
+			if (loadK == event.currentTarget){ 	//here the data is loaded, and the values in the textfields are set to the last saved values.
+				Coins = so.data.hi; 			//load the number
+				tekstC.text = Coins+"";			//set the number in the text field
 				ResearchPoints = so.data.hi2;
 				tekstRP.text = ResearchPoints+"";
 				trace ("load was pressed");
 			}
+			//-----------------------------------End of the game save and load code--
 			
 		}
 		function update(evt:Event):void{
