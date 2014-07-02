@@ -20,7 +20,7 @@
 	import flash.text.engine.Kerning;
 	
 	import testBox1;
-	
+	import testBox2;
 	
 	public class SmashCityScript extends MovieClip {
 		
@@ -41,13 +41,16 @@
 		var stageWidth:int = 600;	// The width of the stage
 		
 		// Testing for enemy spawning--------
-		var myTestBox1:testBox1;	// Creates the object for the "enemies"
-		var testArray:Array;		// Creates an array there shall contain the "enemies" there will be spawned
-		var spawnTimer:int;
+		var tanks:testBox1;			// Creates the object for the Tanks
+		var enemyArray:Array;		// Creates an array there shall contain the Tanks there will be spawned
+		var tankSpawnTimer:int = 0;	// Creates an int there shall work as a timer for the Tanks
+		var grenade:testBox4;		// Creates the object for the Grenades
+		var ammoArray:Array;		// Creates an array there shall contain the Grenades there will be spawned
+		var grenadeSpeed:int = 10;	// Creates an int there hold the speed of the Grenades
 		
-		var parachuteTest:testBox2;			// Creates the object for the "Parachute guys"
-		var parachuteStartPosition:Array;	// Creates an array there shall contain the position for each "Parachute guy"
-		var parachuteSpawnTimer:int;
+		var parachuteTest:testBox2;				// Creates the object for the Parachute guys
+		var parachuteStartPosition:Array;		// Creates an array there shall contain the position for each Parachute guy
+		var parachuteSpawnTimer:int = 0;	// Creates an int there shall work as a timer for the Parachute guys
 		
 		public function SmashCityScript() {
 			
@@ -86,17 +89,18 @@
 			addChild (tekstRP);
 			
 			// Enemy spawner ----------
-			testArray = new Array(15);			// Creates the spaces to the array of enemies
-			for(var i=0; i<15; i++){			// Enteres every entry of the array
-				if(i < 10)
-					testArray[i] = new testBox1();	// Sets a new "enemy" into the array
-				else if (i >= 10 && i < 15)
-					testArray[i] = new testBox2();
-			}									// Note that this means that we are limited for a spesific amount of enemies (I think)
-			spawnTimer = 0;						// Sets the spawntimer to 0 for the enemies
-			parachuteSpawnTimer = 0;			// Sets the spawntimer to 0 for the Parachute guys
-			parachuteStartPosition = new Array(200, 250, 300, 350, 400);	// An array containing the positions of the parachute guys
-								// Look at the update function for how the enemies are spawned
+			enemyArray = new Array(15);				// Creates the spaces to the array of Enemies
+			ammoArray = new Array(10);				// Creates the spaces to the array of ammo the Tanks have
+			for(var i=0; i<15; i++){				// Enteres every entry of the array of Enemies
+				if(i < 10){							// The first 10 entries:
+					enemyArray[i] = new testBox1();	// Sets a new Tank into the array of Enemies
+					ammoArray[i] = new testBox4();	// Sets a new grenade into the array of Ammo
+				}
+				else if (i >= 10 && i < 15)			// Next 5 entries:
+					enemyArray[i] = new testBox2();	// Sets a new Parachute guy into the array of Enemies
+			}
+			parachuteStartPosition = new Array(200, 250, 300, 350, 400);	// An array containing the positions of the Parachute guys
+							// ----- Look at the update function for how the Eneimes are spawned -----
 			
 			//------------------------------------------------------------------
 			stage.addEventListener(Event.ENTER_FRAME, update);
@@ -120,42 +124,60 @@
 			
 		}
 		function update(evt:Event):void{
-			//insæt kode der opdaterer hver frame her
-			spawnTimer++;										// The spawntimer counts up every frame
-			if(spawnTimer >= 72){								// When reaching 72 frames (3 seconds) then:
-				var rand:int = int(Math.random()*10);			// Generate a random number
-				var testSelected:MovieClip = testArray[rand];	// Pick the entry in the array with this number
+			tankSpawnTimer++;									// The spawn timer for the Tanks counts up every frame
+			if(tankSpawnTimer >= 72){							// When reaching 72 frames (3 seconds) then:
+				var rand:int = int(Math.random()*10);			// Generate a random number from 0 to 9
+				var testSelected:MovieClip = enemyArray[rand];	// Pick the entry in the array with this number
 				testSelected.spawn();							// Run the spawn function (see the "testBox1" class)
-				addChild(testSelected);							// Adds the object to the scene
-				spawnTimer = 0;									// Resets the spawn timer for the enmies
+				addChild(testSelected);							// Adds the Tank to the scene
+				tankSpawnTimer = 0;								// Resets the spawn timer for the Tanks
 			}
 			
-			parachuteSpawnTimer++;								// The spawntimer for the parachute guys counts up every frame
+			parachuteSpawnTimer++;								// The spawn timer for the Parachute guys counts up every frame
 			if(parachuteSpawnTimer >= 240){						// When reaching 240 frames (10 seconds) then:
-				for(var i:int = 10; i<15; i++){					// Enter all the "Parachute guy" entries
-					testArray[i].setValueX(parachuteStartPosition[i - 10]);	// Set their X position from the array mentioned before
-					testArray[i].setValueY(0 - 24 * (i - 10));	// Sets their Y position which gives a delayed effect (minus 24 for each entry)
-					testArray[i].spawn();						// Run the spawn function (see the "testBox2" class)
-					addChild(testArray[i]);						// Adds the object to the scene
+				for(var i:int = 10; i<15; i++){					// Enter all the Parachute guy entries in the Enemies array
+					enemyArray[i].setValueX(parachuteStartPosition[i - 10]);	// Set their X position from the position array mentioned before
+					enemyArray[i].setValueY(0 - 24 * (i - 10));	// Sets their Y position which gives a delayed effect (minus 24 for each entry)
+					enemyArray[i].spawn();						// Run the spawn function (see the "testBox2" class)
+					addChild(enemyArray[i]);					// Adds the object to the scene
 				}
-				parachuteSpawnTimer = 0;						// Resets the spawn timer for the parachute guys
+				parachuteSpawnTimer = 0;						// Resets the spawn timer for the Parachute guys
 			}
 			
-			// The following code checks for all the actions of the enemies
-			for(var i:int = 0; i<15; i++){				// Go through every enemy entry in the array
-				if(testArray[i].isSpawned == true){		// Are they spawned on the stage? if yes then:
-					testArray[i].update();				// Run their update function there makes them move
+			// The following code checks for all the actions of the Enemies
+			for(var i:int = 0; i<15; i++){				// Go through every enemy entry in the enemy array
+				if(enemyArray[i].isSpawned == true){	// Are the current enemy spawned on the stage? if yes then:
+					enemyArray[i].update();				// Run the current enemy update function there makes it move
 					
-					if(i < 10){								// The "Enemies" entries:
-						if(testArray[i].x >= stageWidth){	// Have they reached the far right of the stage? If yes then:
-							removeChild(testArray[i]);		// Remove the enemy object from the stage
-							testArray[i].deSpawn();			// Run the deSpawn function (see the "testBox1" class)
+					if(i < 10){								// The "Tanks" entries:
+						if(enemyArray[i].x >= stageWidth){	// Have the current Tank reached the far right of the stage? If yes then:
+							removeChild(enemyArray[i]);		// Remove the current Tank from the stage
+							enemyArray[i].deSpawn();		// Run the deSpawn function (see the "testBox1" class)
+						}
+						if(enemyArray[i].isShooting == true){		// Is the Tank currently shooting a Grenade? If yes then:0
+							ammoArray[i].x = enemyArray[i].valueX;	// Set the Grenades's X value as the same as the Tank's X value
+							ammoArray[i].y = enemyArray[i].valueY;	// Set the Grenades's Y value as the same as the Tank's Y value
+							addChild(ammoArray[i]);					// Add the Grenade to the stage
+							enemyArray[i].setisShooting(false);		// A Grenade have been shot! So no more shall be spawned! Better set it to false
+						}
+						// The following code makes the current Grenade in the array move towards the center of the stage (300,300)
+						if(ammoArray[i].x > 300){
+							ammoArray[i].x -= grenadeSpeed;
+						}
+						else if(ammoArray[i].x < 300){
+							ammoArray[i].x += grenadeSpeed;
+						}
+						if(ammoArray[i].y > 300){
+							ammoArray[i].y -= grenadeSpeed;
+						}
+						else if(ammoArray[i].y < 300){
+							ammoArray[i].y += grenadeSpeed;
 						}
 					}
-					else if(i >= 10 && i < 15){				// The "Parachute guys" entires:
-						if(testArray[i].y >= 400){			// Have they reached at a certain point on the stage? If yes then:
-							removeChild(testArray[i]);		// Remove the enemy object from the stage
-							testArray[i].deSpawn();			// Run the deSpawn function (see the "testBox2" class)
+					else if(i >= 10 && i < 15){				// The Parachute guys entires:
+						if(enemyArray[i].y >= 400){			// Have the current Parachute guy reached at a certain point on the stage? If yes then:
+							removeChild(enemyArray[i]);		// Remove the current Parachute guy from the stage
+							enemyArray[i].deSpawn();		// Run the deSpawn function (see the "testBox2" class)
 						}
 					}
 				}
