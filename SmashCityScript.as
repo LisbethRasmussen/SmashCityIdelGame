@@ -48,8 +48,8 @@
 		var ammoArray:Array;		// Creates an array there shall contain the Grenades there will be spawned
 		var grenadeSpeed:int = 10;	// Creates an int there hold the speed of the Grenades
 		
-		var parachuteTest:testBox2;				// Creates the object for the Parachute guys
-		var parachuteStartPosition:Array;		// Creates an array there shall contain the position for each Parachute guy
+		var parachuteTest:testBox2;			// Creates the object for the Parachute guys
+		var parachuteStartPosition:Array;	// Creates an array there shall contain the position for each Parachute guy
 		var parachuteSpawnTimer:int = 0;	// Creates an int there shall work as a timer for the Parachute guys
 		
 		public function SmashCityScript() {
