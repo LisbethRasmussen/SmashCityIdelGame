@@ -6,7 +6,7 @@
 	public class testBox2 extends MovieClip {
 		
 		private var _isSpawned:Boolean = false;	// The Parachute guys haven't been spawn when they are created, so this checks if they are on the stage or not
-		private var _moveSpeed:Number = 5;		// The move speed for the Parachute guys
+		private var _moveSpeed:int = 5;		// The move speed for the Parachute guys
 		
 		public function testBox2() {
 			

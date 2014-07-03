@@ -6,16 +6,14 @@
 	public class testBox1 extends MovieClip {
 		
 		private var _isSpawned:Boolean = false;		// The Thanks haven't been spawn when they are created, so this checks if they are on the stage or not
-		private var _moveSpeed:Number = 5;			// The move speed for the Tanks
+		private var _moveSpeed:int = 5;			// The move speed for the Tanks
 		private var _shootTimer:int = 0;			// The timer for when the Tanks shall shoot
 		private var _isShooting:Boolean = false;	// The bool there dertimines if a Tank have shot a Grenade or not
-		
 		private var _myTestBox3:testBox3;			// Creates the Shoot effect on the tank (Composition)
 		
 		public function testBox1() {
 			this.x = 0;							// When created will the Tank be placed at 0 on the x axies
 			this.y = (Math.random()*500)+50;	// And in a random location on the y axies (from 50 to 550)
-			
 			_myTestBox3 = new testBox3;			// Creates a new Shoot effect on the stage
 		}
 		
@@ -46,11 +44,11 @@
 			return _isSpawned;
 		}
 		
-		public function get valueX():Number{	// A getter to optain the Tank's X value
+		public function get valueX():int{	// A getter to optain the Tank's X value
 			return this.x;
 		}
 		
-		public function get valueY():Number{	// A getter to optain the Tank's Y value
+		public function get valueY():int{	// A getter to optain the Tank's Y value
 			return this.y;
 		}
 		
