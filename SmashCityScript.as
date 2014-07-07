@@ -19,7 +19,8 @@
 	import flash.ui.Keyboard;
 	import flash.text.engine.Kerning;
 	
-	import testBox1;
+	import DaTankv2RH0jre;
+	import DaTankv2;
 	import testBox2;
 	
 	public class SmashCityScript extends MovieClip {
@@ -37,19 +38,17 @@
 		var TF:TextFormat;				//a variable to hold the font of the text and size and color.
 		//------------------------------------
 		
-		// Variables there dosn't fall into a category---
-		var stageWidth:int = 600;	// The width of the stage
-		
 		// Testing for enemy spawning--------
-		var tanks:testBox1;			// Creates the object for the Tanks
-		var enemyArray:Array;		// Creates an array there shall contain the Tanks there will be spawned
-		var tankSpawnTimer:int = 0;	// Creates an int there shall work as a timer for the Tanks
-		var grenade:testBox4;		// Creates the object for the Grenades
-		var ammoArray:Array;		// Creates an array there shall contain the Grenades there will be spawned
-		var grenadeSpeed:int = 10;	// Creates an int there hold the speed of the Grenades
+		var tankRight:DaTankv2RH0jre;	// Creates the object for the Tanks (Right)
+		var tankLeft:DaTankv2;			// Creates the object for the Tanks (Left)
+		var enemyArray:Array;			// Creates an array there shall contain the Tanks there will be spawned
+		var tankSpawnTimer:int = 0;		// Creates an int there shall work as a timer for the Tanks
+		var grenade:testBox4;			// Creates the object for the Grenades
+		var ammoArray:Array;			// Creates an array there shall contain the Grenades there will be spawned
+		var grenadeSpeed:int = 10;		// Creates an int there hold the speed of the Grenades
 		
-		var parachuteTest:testBox2;				// Creates the object for the Parachute guys
-		var parachuteStartPosition:Array;		// Creates an array there shall contain the position for each Parachute guy
+		var parachuteTest:testBox2;			// Creates the object for the Parachute guys
+		var parachuteStartPosition:Array;	// Creates an array there shall contain the position for each Parachute guy
 		var parachuteSpawnTimer:int = 0;	// Creates an int there shall work as a timer for the Parachute guys
 		
 		public function SmashCityScript() {
@@ -92,12 +91,15 @@
 			enemyArray = new Array(15);				// Creates the spaces to the array of Enemies
 			ammoArray = new Array(10);				// Creates the spaces to the array of ammo the Tanks have
 			for(var i=0; i<15; i++){				// Enteres every entry of the array of Enemies
-				if(i < 10){							// The first 10 entries:
-					enemyArray[i] = new testBox1();	// Sets a new Tank into the array of Enemies
-					ammoArray[i] = new testBox4();	// Sets a new grenade into the array of Ammo
-				}
+				if(i < 10)							// The first 10 entries:
+					enemyArray[i] = new DaTankv2RH0jre();	// Sets a new Tank into the array of Enemies
+				/*else if (i >= 5 && i < 10)
+					enemyArray[i] = new DaTankv2();*/
 				else if (i >= 10 && i < 15)			// Next 5 entries:
 					enemyArray[i] = new testBox2();	// Sets a new Parachute guy into the array of Enemies
+					
+				if (i < 10)
+					ammoArray[i] = new testBox4();	// Sets a new grenade into the array of Ammo
 			}
 			parachuteStartPosition = new Array(200, 250, 300, 350, 400);	// An array containing the positions of the Parachute guys
 							// ----- Look at the update function for how the Eneimes are spawned -----
@@ -128,6 +130,7 @@
 			if(tankSpawnTimer >= 72){							// When reaching 72 frames (3 seconds) then:
 				var rand:int = int(Math.random()*10);			// Generate a random number from 0 to 9
 				var testSelected:MovieClip = enemyArray[rand];	// Pick the entry in the array with this number
+				testSelected.y = (Math.random()*50)+450;		// When created will the Tank be placed in a random location on the y axies (from 450 to 500)
 				testSelected.spawn();							// Run the spawn function (see the "testBox1" class)
 				addChild(testSelected);							// Adds the Tank to the scene
 				tankSpawnTimer = 0;								// Resets the spawn timer for the Tanks
@@ -150,7 +153,7 @@
 					enemyArray[i].update();				// Run the current enemy update function there makes it move
 					
 					if(i < 10){								// The "Tanks" entries:
-						if(enemyArray[i].x >= stageWidth){	// Have the current Tank reached the far right of the stage? If yes then:
+						if(enemyArray[i].x >= 600){			// Have the current Tank reached the far right of the stage? If yes then:
 							removeChild(enemyArray[i]);		// Remove the current Tank from the stage
 							enemyArray[i].deSpawn();		// Run the deSpawn function (see the "testBox1" class)
 						}
