@@ -16,7 +16,7 @@
 		}
 		
 		function spawn(){				// The function there makes the object spawn into the stage
-			this._isSpawned = true;		// Spawn will be true, which will affect the update function in "SmaschCityScript"00
+			this._isSpawned = true;		// Spawn will be true, which will affect the update function in "SmaschCityScript"
 		}
 		
 		function deSpawn(){				// The function there despawns the object from the stage

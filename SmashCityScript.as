@@ -91,10 +91,12 @@
 			enemyArray = new Array(15);				// Creates the spaces to the array of Enemies
 			ammoArray = new Array(10);				// Creates the spaces to the array of ammo the Tanks have
 			for(var i=0; i<15; i++){				// Enteres every entry of the array of Enemies
-				if(i < 10)							// The first 10 entries:
-					enemyArray[i] = new DaTankv2RH0jre();	// Sets a new Tank into the array of Enemies
-				/*else if (i >= 5 && i < 10)
-					enemyArray[i] = new DaTankv2();*/
+				if(i < 5)							// The first 5 entries:
+					enemyArray[i] = new DaTankv2RH0jre();	// Sets a new Tank (Right) into the array of Enemies
+				else if (i >= 5 && i < 10){			// The next 5 entries:
+					enemyArray[i] = new DaTankv2();	// Sets a new Tank (Left) into the array of Enemies
+					enemyArray[i].x = 800;			// To solve a bug will te Left Tanks set thier x value here.
+				}
 				else if (i >= 10 && i < 15)			// Next 5 entries:
 					enemyArray[i] = new testBox2();	// Sets a new Parachute guy into the array of Enemies
 					
@@ -152,10 +154,20 @@
 				if(enemyArray[i].isSpawned == true){	// Are the current enemy spawned on the stage? if yes then:
 					enemyArray[i].update();				// Run the current enemy update function there makes it move
 					
-					if(i < 10){								// The "Tanks" entries:
-						if(enemyArray[i].x >= 600){			// Have the current Tank reached the far right of the stage? If yes then:
-							removeChild(enemyArray[i]);		// Remove the current Tank from the stage
-							enemyArray[i].deSpawn();		// Run the deSpawn function (see the "testBox1" class)
+					if(i < 10){									// The Tank entries:
+						if(i < 5){								// The Right Tank entries:
+							if(enemyArray[i].x >= 800){			// Have the current Tank reached the far right of the stage? If yes then:
+								removeChild(enemyArray[i]);		// Remove the current Tank from the stage
+								enemyArray[i].deSpawn();		// Run the deSpawn function (see the "testBox1" class)
+								enemyArray[i].x = 0;			// Resets the Tanks spawning point
+							}
+						}
+						else if(i >= 5 && i < 10){				// The Left Tank entries:
+							if(enemyArray[i].x <= 0){			// Have the current Tank reached the far right of the stage? If yes then:
+								removeChild(enemyArray[i]);		// Remove the current Tank from the stage
+								enemyArray[i].deSpawn();		// Run the deSpawn function (see the "testBox1" class)
+								enemyArray[i].x = 800;			// Resets the Tanks spawning point
+							}
 						}
 						if(enemyArray[i].isShooting == true){		// Is the Tank currently shooting a Grenade? If yes then:0
 							ammoArray[i].x = enemyArray[i].valueX;	// Set the Grenades's X value as the same as the Tank's X value
@@ -164,10 +176,10 @@
 							enemyArray[i].setisShooting(false);		// A Grenade have been shot! So no more shall be spawned! Better set it to false
 						}
 						// The following code makes the current Grenade in the array move towards the center of the stage (300,300)
-						if(ammoArray[i].x > 300){
+						if(ammoArray[i].x > 400){
 							ammoArray[i].x -= grenadeSpeed;
 						}
-						else if(ammoArray[i].x < 300){
+						else if(ammoArray[i].x < 400){
 							ammoArray[i].x += grenadeSpeed;
 						}
 						if(ammoArray[i].y > 300){
