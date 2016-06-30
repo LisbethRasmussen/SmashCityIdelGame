@@ -2,6 +2,7 @@
 	
 	import flash.display.MovieClip;
 	
+	import SmashCityScript;
 	
 	public class DaTankv2 extends MovieClip {
 		
@@ -10,13 +11,24 @@
 		private var _shootTimer:int = 0;			// The timer for when the Tanks shall shoot
 		private var _isShooting:Boolean = false;	// The bool there dertimines if a Tank have shot a Grenade or not
 		private var _myTestBox3:testBox3;			// Creates the Shoot effect on the tank (Composition)
+		private var _goRight = false;				// Determines if the tank shall go right
+		private var _rightSpawnX;
 		
-		public function DaTankv2() {
+		public function DaTankv2(goRight:Boolean) {
 			_myTestBox3 = new testBox3;			// Creates a new Shoot effect on the stage
+			_goRight = goRight;
+			
+			if (_goRight){
+				this.scaleX *= -1;				// Flips the object so it faces the 'right' way
+			}
 		}
 		
 		function spawn(){				// The function there makes the object spawn into the stage
 			this._isSpawned = true;		// Spawn will be true, which will affect the update function in "SmaschCityScript"
+			if (_goRight)
+				this.x = SmashCityScript.leftSpawnX;
+			else
+				this.x = SmashCityScript.rightSpawnX;
 		}
 		
 		function deSpawn(){				// The function there despawns the object from the stage
@@ -24,7 +36,12 @@
 		}
 		
 		function update(){				// The update function which will update every frame
-			this.x -= _moveSpeed;		// Moves the object to the right
+			if (_goRight){
+				this.x += _moveSpeed;		// Moves the object to the right
+			}
+			else {
+				this.x -= _moveSpeed;		// Moves the object to the left
+			}
 			
 			_shootTimer++;				// The counter for the shot will count up each frame
 			if(_shootTimer == 48){		// After 2 seconds will the tank shoot!

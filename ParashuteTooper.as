@@ -3,13 +3,13 @@
 	import flash.display.MovieClip;
 	
 	
-	public class testBox2 extends MovieClip {
+	public class ParashuteTooper extends MovieClip {
 		
 		private var _isSpawned:Boolean = false;	// The Parachute guys haven't been spawn when they are created, so this checks if they are on the stage or not
 		private var _moveSpeed:int = 5;		// The move speed for the Parachute guys
 		
-		public function testBox2() {
-			
+		public function ParashuteTooper() {
+			// constructor code
 		}
 		
 		function spawn(){				// The function there makes the Parachute guys spawn into the stage

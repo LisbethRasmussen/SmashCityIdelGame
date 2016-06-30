@@ -1,12 +1,6 @@
-Fix the tank scipts so only ONE is needed. What needs to be done:
-- Figure out how to "flip" a object (so the tanks can face left and right with the SAME object)
-- In the code define if either the tank is facing the right or left side (If statements!)
-
 Bug with grenades!
 - Red dot doesn't despawn the right way
 
-Right side of scene position variable missing!
-- So far do we just say something like: "position = 800;" it should be made to a variable
+Note that we are using "comic sans", the most hated font of the internet... we might want to change that xD
 
-Bug with the people when running!
-- Some people disappear because their "random index" was chosen, need to have an if statement there checks if that random index already is spawned or not
+People overlab over the tanks and it looks really weird... not sure how that could be fixed...
